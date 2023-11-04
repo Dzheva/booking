@@ -1,4 +1,4 @@
-package StepProject.dao;
+package daos;
 
 public class FlightDAO {
 }

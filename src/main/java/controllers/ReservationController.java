@@ -1,4 +1,4 @@
-package StepProject.controller;
+package controllers;
 
 public class ReservationController {
 }

@@ -1,4 +1,4 @@
-package StepProject.exception;
+package exceptions;
 
 public class BookingException {
 }

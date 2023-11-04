@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class Application {
     private final IOHandler ioHandler;
+    private boolean isRunning;
     private final Map<Integer, Runnable> commands = Map.of(
             Command.SHOW_FLIGHTS, this::showFlights,
             Command.SHOW_FLIGHT_INFORMATION, this::showFlightInformation,
@@ -15,7 +16,6 @@ public class Application {
             Command.SHOW_RESERVED_FLIGHTS, this::showReservedFlights,
             Command.EXIT, () -> isRunning = false
     );
-    private boolean isRunning;
 
     public Application() {
         ioHandler = new IOHandler();

@@ -1,4 +1,4 @@
-package StepProject.model;
+package models;
 
 public class Reservation {
 }
