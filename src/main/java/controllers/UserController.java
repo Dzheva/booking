@@ -1,2 +1,11 @@
-package controllers;public class UserController {
+package controllers;
+
+import services.UserService;
+
+public class UserController {
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 }
