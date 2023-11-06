@@ -5,6 +5,8 @@ import java.nio.file.Path;
 
 @SuppressWarnings("CallToPrintStackTrace")
 public final class ResourceHandler {
+    private ResourceHandler() {}
+
     public static void saveData(String filename, Object object) {
         try (FileOutputStream fileStream = new FileOutputStream(getResourcePath(filename));
              ObjectOutputStream objectStream = new ObjectOutputStream(fileStream)) {
