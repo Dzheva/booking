@@ -1,4 +1,10 @@
 package daos;
+import models.Flight;
+import java.util.List;
 
-public class FlightDAO {
+public interface FlightDAO {
+        List<Flight> getAllFlights();
+        Flight getFlightById(int id);
+        void addFlight(Flight flight);
+        void deleteFlightById(int id);
 }
