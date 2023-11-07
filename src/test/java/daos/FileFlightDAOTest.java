@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,5 +38,35 @@ class FileFlightDAOTest {
 
     @Test
     void deleteFlightById() {
+        fileFlightDAO.deleteFlightById(1);
+        assertNull(fileFlightDAO.getFlightById(1));
     }
+
+    @Test
+    void testAddFlight() {
+        List<Flight> flightList = fileFlightDAO.getAllFlights();
+
+        int initialSize = flightList.size();
+
+        LocalDateTime newDepartureTime = LocalDateTime.of(2023, 10, 16, 14, 30);
+        LocalDateTime newArriveTime = LocalDateTime.of(2023, 10, 16, 18, 15);
+        Flight newFlight = new Flight("Los Angeles", "London", newDepartureTime, newArriveTime, 75);
+
+        fileFlightDAO.addFlight(newFlight);
+
+        flightList = fileFlightDAO.getAllFlights();
+
+        int finalSize = flightList.size();
+
+        assertTrue(finalSize == initialSize + 1);
+
+        Flight addedFlight = flightList.get(initialSize);
+
+        assertEquals(newFlight.getOrigin(), addedFlight.getOrigin());
+        assertEquals(newFlight.getDestination(), addedFlight.getDestination());
+        assertEquals(newFlight.getDepartureTime(), addedFlight.getDepartureTime());
+        assertEquals(newFlight.getArrivalTime(), addedFlight.getArrivalTime());
+        assertEquals(newFlight.getSeatsAvailable(), addedFlight.getSeatsAvailable());
+    }
+
 }
