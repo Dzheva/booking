@@ -7,24 +7,35 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class FileFlightDAOTest {
-    FileFlightDAO fileFlightDAO;
+    private Flight flight;
+    private FileFlightDAO fileFlightDAO;
 
     @BeforeEach
     void setUp() {
+        LocalDateTime departureTime = LocalDateTime.of(2023, 10, 15, 14, 30);
+        LocalDateTime arriveTime = LocalDateTime.of(2023, 10, 15, 18, 15);
+        flight = new Flight("New York", "Milan", departureTime, arriveTime, 50);
         fileFlightDAO = new FileFlightDAO();
+        fileFlightDAO.addFlight(flight);
     }
 
     @Test
     void createAndRetrieveFlights() {
-        LocalDateTime departureTime = LocalDateTime.of(2023, 10, 15, 14, 30);
-        LocalDateTime arriveTime = LocalDateTime.of(2023, 10, 15, 18, 15);
-        Flight flight = new Flight("New York", "Milan", departureTime, arriveTime, 50);
-
-        fileFlightDAO.addFlight(flight);
         List<Flight> list = fileFlightDAO.getAllFlights();
         assertTrue(list.contains(flight));
+    }
+
+    @Test
+    void getFlightById() {
+        assertEquals(flight, fileFlightDAO.getFlightById(flight.getId()));
+        assertNull(fileFlightDAO.getFlightById(10));
+        assertNull(fileFlightDAO.getFlightById(-1));
+    }
+
+    @Test
+    void deleteFlightById() {
     }
 }
