@@ -27,4 +27,9 @@ public class FlightService {
     public void deleteFlightById(int id) {
         flightDAO.deleteFlightById(id);
     }
+
+    public void generateFlights(){
+        int quantity = 50; // в сервисе количество рейсов можно регулировать
+        flightDAO.generateAndSaveFlights(quantity);
+    }
 }

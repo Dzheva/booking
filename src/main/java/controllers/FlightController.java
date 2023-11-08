@@ -27,4 +27,8 @@ public class FlightController {
     public void deleteFlightById(int id) {
         flightService.deleteFlightById(id);
     }
+
+    public void generateFlights(){
+        flightService.generateFlights();
+    }
 }
