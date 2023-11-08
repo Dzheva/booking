@@ -6,5 +6,6 @@ public class Command {
     public static final Integer RESERVE_FLIGHT = 3;
     public static final Integer CANCEL_FLIGHT_RESERVATION = 4;
     public static final Integer SHOW_RESERVED_FLIGHTS = 5;
-    public static final Integer EXIT = 6;
+    public static final Integer CHANGE_USER = 6;
+    public static final Integer EXIT = 7;
 }

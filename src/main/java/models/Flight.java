@@ -1,12 +1,13 @@
 package models;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class Flight implements Serializable {
     private static int idCounter = 1;
     private final int id;
-    private  String origin;
-    private  String destination;
+    private String origin;
+    private String destination;
     private LocalDateTime departureTime;
     private LocalDateTime arrivalTime;
     private int seatsAvailable;

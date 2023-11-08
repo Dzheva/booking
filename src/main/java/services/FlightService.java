@@ -1,5 +1,6 @@
 package services;
 
+import daos.FileFlightDAO;
 import daos.FlightDAO;
 import models.Flight;
 
@@ -8,11 +9,11 @@ import java.util.List;
 public class FlightService {
     private final FlightDAO flightDAO;
 
-    public FlightService(FlightDAO flightDAO) {
-        this.flightDAO = flightDAO;
+    public FlightService() {
+        this.flightDAO = new FileFlightDAO();
     }
 
-    public List<Flight> getAllFlights(){
+    public List<Flight> getAllFlights() {
         return flightDAO.getAllFlights();
     }
 
@@ -28,7 +29,7 @@ public class FlightService {
         flightDAO.deleteFlightById(id);
     }
 
-    public void generateFlights(){
+    public void generateFlights() {
         int quantity = 50; // в сервисе количество рейсов можно регулировать
         flightDAO.generateAndSaveFlights(quantity);
     }

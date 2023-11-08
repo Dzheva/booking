@@ -8,11 +8,11 @@ import java.util.List;
 public class FlightController {
     private final FlightService flightService;
 
-    public FlightController(FlightService flightService) {
-        this.flightService = flightService;
+    public FlightController() {
+        this.flightService = new FlightService();
     }
 
-    public List<Flight> getAllFlights(){
+    public List<Flight> getAllFlights() {
         return flightService.getAllFlights();
     }
 
@@ -28,7 +28,7 @@ public class FlightController {
         flightService.deleteFlightById(id);
     }
 
-    public void generateFlights(){
+    public void generateFlights() {
         flightService.generateFlights();
     }
 }

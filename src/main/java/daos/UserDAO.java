@@ -8,10 +8,12 @@ import java.util.List;
 
 public class UserDAO {
     private final String FILENAME = "users.ser";
-    private List<User> users;
+    private final List<User> users;
 
+    @SuppressWarnings("unchecked")
     public UserDAO() {
-        this.users = new ArrayList<>();
+        Object object = ResourceHandler.loadData(FILENAME);
+        users = object == null ? new ArrayList<>() : (List<User>) object;
     }
 
     public List<User> getAllUsers() {
@@ -20,19 +22,10 @@ public class UserDAO {
 
     public void addUser(User user) {
         users.add(user);
+        ResourceHandler.saveData(FILENAME, users);
     }
 
     public User getUserById(int id) {
         return (id >= 0 && users.size() > id) ? users.get(id) : null;
-    }
-
-    public void saveData() {
-        ResourceHandler.saveData(FILENAME, users);
-    }
-
-    @SuppressWarnings("unchecked")
-    public void loadData() {
-        Object data = ResourceHandler.loadData(FILENAME);
-        if (data != null) users = (List<User>) data;
     }
 }

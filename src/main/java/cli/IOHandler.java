@@ -19,17 +19,28 @@ public class IOHandler {
         System.out.println(message);
     }
 
+    public void printLine(Object object) {
+        printLine(String.valueOf(object));
+    }
+
     public void printNewLine() {
         System.out.println();
     }
 
-    public int getInput(String message) {
+    public String getStringInput(String message) {
+        print(appendInputSuffix(message));
+        return scanner.nextLine();
+    }
+
+    public int getIntegerInput(String message) {
         print(appendInputSuffix(message));
         while (!scanner.hasNextInt()) {
             print(appendInputSuffix(ApplicationString.BAD_INTEGER));
-            scanner.next();
+            scanner.nextLine();
         }
-        return scanner.nextInt();
+        int nextInt = scanner.nextInt();
+        scanner.nextLine();
+        return nextInt;
     }
 
     private String appendInputSuffix(String message) {
