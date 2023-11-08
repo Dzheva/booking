@@ -69,4 +69,11 @@ class FileFlightDAOTest {
         assertEquals(newFlight.getSeatsAvailable(), addedFlight.getSeatsAvailable());
     }
 
+    @Test
+    void generateAndSaveFlights() {
+        int quantity = 15;
+        fileFlightDAO.generateAndSaveFlights(quantity);
+        List<Flight> flights = fileFlightDAO.getAllFlights();
+        assertEquals(quantity, flights.size() - 1); // "-1" тому що ми в setUp() додаємо 1 рейс по дефолту
+    }
 }

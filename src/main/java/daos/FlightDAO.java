@@ -7,4 +7,5 @@ public interface FlightDAO {
         Flight getFlightById(int id);
         void addFlight(Flight flight);
         void deleteFlightById(int id);
+        void generateAndSaveFlights(int quantity);
 }
