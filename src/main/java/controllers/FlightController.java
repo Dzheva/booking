@@ -24,6 +24,10 @@ public class FlightController {
         flightService.addFlight(flight);
     }
 
+    public void addListFlight(List<Flight> flightsList){
+        flightService.addListFlight(flightsList);
+    }
+
     public void deleteFlightById(int id) {
         flightService.deleteFlightById(id);
     }

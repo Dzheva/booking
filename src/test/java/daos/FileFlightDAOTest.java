@@ -3,8 +3,10 @@ package daos;
 import models.Flight;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import services.FlightService;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,10 +72,11 @@ class FileFlightDAOTest {
     }
 
     @Test
-    void generateAndSaveFlights() {
-        int quantity = 15;
-        fileFlightDAO.generateAndSaveFlights(quantity);
-        List<Flight> flights = fileFlightDAO.getAllFlights();
-        assertEquals(quantity, flights.size() - 1); // "-1" тому що ми в setUp() додаємо 1 рейс по дефолту
+    void testAddListFlight(){
+        List<Flight> list = new ArrayList<>();
+        list = fileFlightDAO.getAllFlights();
+        fileFlightDAO.addListFlight(list);
+        assertFalse(fileFlightDAO.getAllFlights().isEmpty());
     }
+
 }

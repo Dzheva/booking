@@ -4,7 +4,10 @@ import daos.FileFlightDAO;
 import daos.FlightDAO;
 import models.Flight;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FlightService {
     private final FlightDAO flightDAO;
@@ -25,12 +28,38 @@ public class FlightService {
         flightDAO.addFlight(flight);
     }
 
+    public void addListFlight(List<Flight> flightsList){
+        flightDAO.addListFlight(flightsList);
+    }
+
     public void deleteFlightById(int id) {
         flightDAO.deleteFlightById(id);
     }
 
     public void generateFlights() {
         int quantity = 50; // в сервисе количество рейсов можно регулировать
-        flightDAO.generateAndSaveFlights(quantity);
+        List<Flight> flightList = generateFlights(quantity);
+        addListFlight(flightList);
+        //flightDAO.addListFlight(flightList);
+    }
+
+    public static List<Flight> generateFlights(int count) {
+        List<Flight> flights = new ArrayList<>();
+
+        String[] origins = {"New York", "Los Angeles", "Chicago", "Miami", "Kyiv"};
+        String[] destinations = {"London", "Paris", "Tokyo", "Dubai", "Sydney"};
+
+        for (int i = 0; i < count; i++) {
+            String origin = origins[(int) (Math.random() * origins.length)];
+            String destination = destinations[(int) (Math.random() * destinations.length)];
+            LocalDateTime departureTime = LocalDateTime.now().plusHours((int)(Math.random()*5));
+            LocalDateTime arrivalTime = departureTime.plusHours((int)(Math.random()*10));
+            int seatsAvailable = (int) (Math.random() * 100);
+
+            Flight flight = new Flight(origin, destination, departureTime, arrivalTime, seatsAvailable);
+            flights.add(flight);
+        }
+
+        return flights.stream().distinct().collect(Collectors.toList());
     }
 }

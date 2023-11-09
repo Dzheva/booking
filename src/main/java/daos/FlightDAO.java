@@ -6,6 +6,6 @@ public interface FlightDAO {
         List<Flight> getAllFlights();
         Flight getFlightById(int id);
         void addFlight(Flight flight);
+        void addListFlight (List<Flight> flightList);
         void deleteFlightById(int id);
-        void generateAndSaveFlights(int quantity);
 }
