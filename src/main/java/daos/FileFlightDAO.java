@@ -36,7 +36,8 @@ public class FileFlightDAO implements FlightDAO {
     @Override
     public void addFlight(Flight flight) {
         flightsList.add(flight);
-        ResourceHandler.saveData(flightDataFile, flightsList);
+        //ResourceHandler.saveData(flightDataFile, flightsList);
+        addListFlight(flightsList);
     }
 
     @Override
@@ -47,7 +48,8 @@ public class FileFlightDAO implements FlightDAO {
     @Override
     public void deleteFlightById(int id) {
         flightsList.removeIf(flight -> flight.getId() == id);
-        ResourceHandler.saveData(flightDataFile, flightsList);
+        addListFlight(flightsList);
+        //ResourceHandler.saveData(flightDataFile, flightsList);
     }
 
 }

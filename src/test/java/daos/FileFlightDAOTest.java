@@ -75,6 +75,7 @@ class FileFlightDAOTest {
     void testAddListFlight(){
         List<Flight> list = new ArrayList<>();
         list = fileFlightDAO.getAllFlights();
+        fileFlightDAO.deleteFlightById(1);
         fileFlightDAO.addListFlight(list);
         assertFalse(fileFlightDAO.getAllFlights().isEmpty());
     }
