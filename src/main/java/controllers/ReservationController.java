@@ -34,7 +34,7 @@ public class ReservationController {
             List<Reservation> reservationList = reservationService.getAllReservation();
 
             if(reservationList.contains(reservation)){
-                flightService.increaseSeats(reservation.getFlightId(), reservation.getPassengers().size());
+                flightService.increaseSeats(getIdFlightByReservation(reservation), reservation.getPassengers().size());
                 deleteReservationById(reservation.getId());
                 System.out.println("The reservation is canceled.");
             } else {
