@@ -9,9 +9,9 @@ public class Reservation implements Serializable {
     private final int id;
     private final int userId;
     private final int flightId;
-    private final List<User> passengers;
+    private final List<String> passengers;
 
-    public Reservation(int userId, int flightId, List<User> passengers) {
+    public Reservation(int userId, int flightId, List<String> passengers) {
         this.id = idCounter++;
         this.userId = userId;
         this.flightId = flightId;
@@ -30,7 +30,7 @@ public class Reservation implements Serializable {
         return flightId;
     }
 
-    public List<User> getPassengers() {
+    public List<String> getPassengers() {
         return passengers;
     }
 
