@@ -4,6 +4,7 @@ import daos.FileFlightDAO;
 import daos.FlightDAO;
 import models.Flight;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,5 +62,36 @@ public class FlightService {
         }
 
         return flights.stream().distinct().collect(Collectors.toList());
+    }
+
+    public void decreaseSeats(int idFlight, int quantitySeats){
+        int updatedQuantitySeats = getFlightById(idFlight).getSeatsAvailable() - quantitySeats;
+        getFlightById(idFlight).setSeatsAvailable(updatedQuantitySeats);
+    }
+
+    public void increaseSeats(int idFlight, int quantitySeats){
+        int updatedQuantitySeats = getFlightById(idFlight).getSeatsAvailable() + quantitySeats;
+        getFlightById(idFlight).setSeatsAvailable(updatedQuantitySeats);
+    }
+
+    //может хватить только метода updateQuantitySeats,
+    // но на всякий случай добавил методы decreaseSeats и increaseSeats
+    public void updateQuantitySeats(int idFlight, int updatedQuantitySeats){
+        getFlightById(idFlight).setSeatsAvailable(updatedQuantitySeats);
+    }
+
+    public List<Flight> searchFlights(String destination, LocalDate arrivalDate, int quantityPassengers){
+        List<Flight> result = new ArrayList<>();
+        List<Flight> flightList = getAllFlights();
+
+        for(Flight flight : flightList){
+            if(flight.getDestination().equalsIgnoreCase(destination)
+                    &&flight.getArrivalTime().toLocalDate().isEqual(arrivalDate)
+                    &&(flight.getSeatsAvailable() >= quantityPassengers)){
+                result.add(flight);
+            }
+        }
+
+        return result;
     }
 }

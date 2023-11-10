@@ -1,15 +1,18 @@
 package services;
 
 import daos.ReservationDAO;
+import models.Flight;
 import models.Reservation;
+import models.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReservationService {
     private final ReservationDAO reservationDAO;
 
-    public ReservationService(ReservationDAO reservationDAO) {
-        this.reservationDAO = reservationDAO;
+    public ReservationService() {
+        this.reservationDAO = new ReservationDAO();
     }
 
     public List<Reservation> getAllReservation(){

@@ -6,14 +6,10 @@ import java.util.Objects;
 
 public class Reservation implements Serializable {
     private static int idCounter = 1;
-
     private final int id;
     private final int userId;
-
     private final int flightId;
-
     private final List<User> passengers;
-
 
     public Reservation(int userId, int flightId, List<User> passengers) {
         this.id = idCounter++;

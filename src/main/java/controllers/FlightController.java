@@ -1,8 +1,11 @@
 package controllers;
 
 import models.Flight;
+import models.Reservation;
 import services.FlightService;
+import services.ReservationService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class FlightController {
@@ -34,5 +37,9 @@ public class FlightController {
 
     public void generateFlights() {
         flightService.generateFlights();
+    }
+
+    public void searchFlights(String destination, LocalDate arrivalDate, int quantityPassengers) {
+        flightService.searchFlights(destination, arrivalDate, quantityPassengers);
     }
 }
