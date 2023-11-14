@@ -1,97 +1,51 @@
 package services;
 
-import daos.FileFlightDAO;
 import daos.FlightDAO;
+import entities.GeneratedFlight;
 import models.Flight;
+import utilities.FlightGenerator;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class FlightService {
     private final FlightDAO flightDAO;
 
     public FlightService() {
-        this.flightDAO = new FileFlightDAO();
+        this.flightDAO = new FlightDAO();
+        if (getAllFlights().isEmpty()) generateAndAddFlights(50);
     }
 
     public List<Flight> getAllFlights() {
-        return flightDAO.getAllFlights();
+        return flightDAO.getAll();
     }
 
-    public Flight getFlightById(int id) {
-        return flightDAO.getFlightById(id);
+    public Flight getFlight(int id) {
+        return flightDAO.get(id);
     }
 
-    public void addFlight(Flight flight) {
-        flightDAO.addFlight(flight);
+    public List<Flight> findFlights(String destination, int numberOfPassengers) {
+        return getAllFlights().stream().filter(flight -> flight.getDestination().equalsIgnoreCase(destination)
+                && flight.getSeatsAvailable() >= numberOfPassengers + 1).toList();
     }
 
-    public void addListFlight(List<Flight> flightsList){
-        flightDAO.addListFlight(flightsList);
+    public void createFlight(String origin, String destination,
+                             LocalDateTime departureTime, LocalDateTime arrivalTime, int seatsAvailable) {
+        Flight flight = new Flight(flightDAO.getNextId(), origin, destination,
+                departureTime, arrivalTime, seatsAvailable);
+        flightDAO.create(flight);
     }
 
-    public void deleteFlightById(int id) {
-        flightDAO.deleteFlightById(id);
+
+    public void generateAndAddFlights(int count) {
+        List<GeneratedFlight> generatedFlights = FlightGenerator.generate(count);
+        generatedFlights.forEach(generatedFlight -> createFlight(
+                generatedFlight.origin(), generatedFlight.destination(),
+                generatedFlight.departureTime(), generatedFlight.arrivalTime(),
+                generatedFlight.seatsAvailable()));
     }
 
-    public void generateFlights() {
-        int quantity = 50; // в сервисе количество рейсов можно регулировать
-        List<Flight> flightList = generateFlights(quantity);
-        addListFlight(flightList);
-        //flightDAO.addListFlight(flightList);
-    }
-
-    public static List<Flight> generateFlights(int count) {
-        List<Flight> flights = new ArrayList<>();
-
-        String[] origins = {"New York", "Los Angeles", "Chicago", "Miami", "Kyiv"};
-        String[] destinations = {"London", "Paris", "Tokyo", "Dubai", "Sydney"};
-
-        for (int i = 0; i < count; i++) {
-            String origin = origins[(int) (Math.random() * origins.length)];
-            String destination = destinations[(int) (Math.random() * destinations.length)];
-            LocalDateTime departureTime = LocalDateTime.now().plusHours((int)(Math.random()*5));
-            LocalDateTime arrivalTime = departureTime.plusHours((int)(Math.random()*10));
-            int seatsAvailable = (int) (Math.random() * 100);
-
-            Flight flight = new Flight(origin, destination, departureTime, arrivalTime, seatsAvailable);
-            flights.add(flight);
-        }
-
-        return flights.stream().distinct().collect(Collectors.toList());
-    }
-
-    public void decreaseSeats(int idFlight, int quantitySeats){
-        int updatedQuantitySeats = getFlightById(idFlight).getSeatsAvailable() - quantitySeats;
-        getFlightById(idFlight).setSeatsAvailable(updatedQuantitySeats);
-    }
-
-    public void increaseSeats(int idFlight, int quantitySeats){
-        int updatedQuantitySeats = getFlightById(idFlight).getSeatsAvailable() + quantitySeats;
-        getFlightById(idFlight).setSeatsAvailable(updatedQuantitySeats);
-    }
-
-    //может хватить только метода updateQuantitySeats,
-    // но на всякий случай добавил методы decreaseSeats и increaseSeats
-    public void updateQuantitySeats(int idFlight, int updatedQuantitySeats){
-        getFlightById(idFlight).setSeatsAvailable(updatedQuantitySeats);
-    }
-
-    public List<Flight> searchFlights(String destination, LocalDate arrivalDate, int quantityPassengers){
-        List<Flight> result = new ArrayList<>();
-        List<Flight> flightList = getAllFlights();
-
-        for(Flight flight : flightList){
-            if(flight.getDestination().equalsIgnoreCase(destination)
-                    &&flight.getArrivalTime().toLocalDate().isEqual(arrivalDate)
-                    &&(flight.getSeatsAvailable() >= quantityPassengers)){
-                result.add(flight);
-            }
-        }
-
-        return result;
+    public void saveAll() {
+        flightDAO.saveAll();
     }
 }

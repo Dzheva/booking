@@ -19,4 +19,8 @@ public class UserController {
     public void createUser(String login, String password, String firstName, String lastName) {
         userService.createUser(login, password, firstName, lastName);
     }
+
+    public void saveAll() {
+        userService.saveAll();
+    }
 }

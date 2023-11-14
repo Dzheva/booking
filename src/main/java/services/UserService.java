@@ -3,7 +3,6 @@ package services;
 import daos.UserDAO;
 import models.User;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 public class UserService {
@@ -14,14 +13,17 @@ public class UserService {
     }
 
     public Optional<User> findUser(String login, String password) {
-        return userDAO.getAllUsers()
-                .stream()
-                .filter(user -> user.getLogin().equals(login) && user.getPassword().equals(password))
-                .findFirst();
+        return userDAO.getAll().stream()
+                .filter(user -> user.login().equals(login) && user.password().equals(password)).findFirst();
     }
 
     public void createUser(String login, String password, String firstName, String lastName) {
-        User user = new User(login, password, firstName, lastName, new ArrayList<>());
-        userDAO.addUser(user);
+        if (userDAO.getAll().stream().anyMatch(user -> user.login().equals(login))) return;
+        User user = new User(userDAO.getNextId(), login, password, firstName, lastName);
+        userDAO.create(user);
+    }
+
+    public void saveAll() {
+        userDAO.saveAll();
     }
 }

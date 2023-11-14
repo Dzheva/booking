@@ -1,56 +1,38 @@
 package controllers;
 
 import models.Flight;
+import models.Passenger;
 import models.Reservation;
 import models.User;
-import services.FlightService;
 import services.ReservationService;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ReservationController {
     private final ReservationService reservationService;
-    private final FlightService flightService;
 
     public ReservationController() {
         this.reservationService = new ReservationService();
-        this.flightService = new FlightService();
     }
 
-    public void addReservation(Reservation reservation){
-            List<Flight> flightList = flightService.getAllFlights();
-
-            if(flightList.contains(getFlightByReservation(reservation))){
-                flightService.decreaseSeats(getIdFlightByReservation(reservation), reservation.getPassengers().size());
-                reservationService.addReservation(reservation);
-                System.out.println("The reservation is completed.");
-            } else {
-                System.out.println("This flight doesn't exist.");
-            }
+    public void createReservation(Flight flight, User user, List<Passenger> passengers) {
+        reservationService.createReservation(flight, user, passengers);
     }
 
-    public void cancelReservation(Reservation reservation){
-            List<Reservation> reservationList = reservationService.getAllReservation();
-
-            if(reservationList.contains(reservation)){
-                flightService.increaseSeats(getIdFlightByReservation(reservation), reservation.getPassengers().size());
-                deleteReservationById(reservation.getId());
-                System.out.println("The reservation is canceled.");
-            } else {
-                System.out.println("This reservation doesn't exist.");
-            }
+    public List<Reservation> getUserReservations(int userId) {
+        return reservationService.getUserReservations(userId);
     }
 
-    public void deleteReservationById(int id){
-        reservationService.deleteReservationById(id);
+    public Optional<Reservation> getUserReservation(int userId, int reservationId) {
+        return reservationService.getUserReservation(userId, reservationId);
     }
 
-    public Flight getFlightByReservation(Reservation reservation){
-        return flightService.getFlightById(getIdFlightByReservation(reservation));
+    public void cancelReservation(Reservation reservation, Flight flight) {
+        reservationService.cancelReservation(reservation, flight);
     }
 
-    public int getIdFlightByReservation(Reservation reservation){
-        return reservation.getFlightId();
+    public void saveAll() {
+        reservationService.saveAll();
     }
 }

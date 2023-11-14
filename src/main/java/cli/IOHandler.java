@@ -19,10 +19,6 @@ public class IOHandler {
         System.out.println(message);
     }
 
-    public void printLine(Object object) {
-        printLine(String.valueOf(object));
-    }
-
     public void printNewLine() {
         System.out.println();
     }
