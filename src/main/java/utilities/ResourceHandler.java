@@ -1,10 +1,21 @@
 package utilities;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 
 public final class ResourceHandler {
+    static {
+        Path path = Path.of("src", "main", "resources").toAbsolutePath();
+        if (!Files.exists(path)) {
+            try {
+                Files.createDirectories(path);
+            } catch (IOException ignore) {
+            }
+        }
+    }
+
     private ResourceHandler() {
     }
 
