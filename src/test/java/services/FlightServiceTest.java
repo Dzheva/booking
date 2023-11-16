@@ -20,9 +20,12 @@ class FlightServiceTest {
     @Test
     void getAllFlights() {
         List<Flight> flights = flightService.getAllFlights();
-        assertNotNull(flights);
-        assertFalse(flights.isEmpty());
-        assertTrue(flights.size() > 1);
+
+        assertAll(
+                () -> assertNotNull(flights),
+                () -> assertFalse(flights.isEmpty()),
+                () -> assertTrue(flights.size() > 1)
+        );
     }
 
     @Test

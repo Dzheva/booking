@@ -24,11 +24,11 @@ class FlightDAOTest {
         LocalDateTime departureTime = LocalDateTime.of(2023, 10, 15, 14, 30);
         LocalDateTime arriveTime = LocalDateTime.of(2023, 10, 15, 18, 15);
         flight = new Flight(flightDAO.getNextId(), "New York", "Milan", departureTime, arriveTime, 50);
+        flightDAO.create(flight);
     }
 
     @Test
     void create() {
-        flightDAO.create(flight);
         assertAll(
                 () -> assertTrue(flightDAO.getAll().contains(flight)),
                 () -> assertFalse(flightDAO.getAll().contains(null))
@@ -37,15 +37,12 @@ class FlightDAOTest {
 
     @Test
     void get() {
-            flightDAO.create(flight);
             assertEquals(flightDAO.get(flight.getId()), flight);
     }
 
     @Test
     void getAll() {
         //We generated 50 flights previously.
-        flightDAO.create(flight);
-
         assertAll(
                 () -> assertTrue(flightDAO.getAll().contains(flight)),
                 () -> assertEquals(flightDAO.getNextId()-1, flightDAO.getAll().size())
@@ -55,14 +52,13 @@ class FlightDAOTest {
     @Test
     void getNextId(){
         int actual = flightDAO.getNextId();
-        int expected = flightDAO.getAll().size()+2;
+        int expected = flightDAO.getAll().size() + 1;
 
         assertEquals(expected, actual);
     }
 
     @Test
     void saveAll(){
-        flightDAO.create(flight);
         flightDAO.saveAll();
         int size1 = flightDAO.getAll().size();
 
