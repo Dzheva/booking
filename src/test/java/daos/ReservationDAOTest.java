@@ -12,70 +12,53 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ReservationDAOTest {
     private ReservationDAO reservationDAO;
+    private int initialSize;
     private Reservation reservation;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         reservationDAO = new ReservationDAO();
-        List<Passenger> passengerList = new ArrayList<>();
-
-        Passenger passenger  = new Passenger("Andrii", "Shevchenko");
-        passengerList.add(passenger);
-
+        initialSize = reservationDAO.getAll().size();
+        List<Passenger> passengerList = new ArrayList<>(
+                List.of(new Passenger("Andriy", "Shevchenko")));
         reservation = new Reservation(reservationDAO.getNextId(), 1, 1, passengerList);
         reservationDAO.create(reservation);
     }
 
     @Test
     void delete() {
-        int expected = reservationDAO.getAll().size() - 1;
-
+        int expectedSize = reservationDAO.getAll().size() - 1;
         reservationDAO.delete(reservation.id());
-        int actual = reservationDAO.getAll().size();
-
-        assertAll(
-                () -> assertEquals(expected, actual),
-                () -> assertFalse(reservationDAO.getAll().contains(reservation))
-        );
+        assertEquals(expectedSize, reservationDAO.getAll().size());
+        assertFalse(reservationDAO.getAll().contains(reservation));
     }
 
     @Test
     void create() {
-        assertAll(
-                () -> assertTrue(reservationDAO.getAll().contains(reservation)),
-                () -> assertEquals(reservation, reservationDAO.get(reservation.id()))
-        );
+        assertTrue(reservationDAO.getAll().contains(reservation));
+        assertEquals(reservation, reservationDAO.get(reservation.id()));
+        assertEquals(initialSize + 1, reservationDAO.getAll().size());
     }
 
     @Test
     void get() {
-         assertEquals(reservationDAO.get(reservation.id()), reservation);
+        assertEquals(reservationDAO.get(reservation.id()), reservation);
     }
 
     @Test
     void getAll() {
-        assertAll(
-                () -> assertFalse(reservationDAO.getAll().isEmpty()),
-                () -> assertTrue(reservationDAO.getAll().contains(reservation)),
-                () -> assertEquals(reservationDAO.getNextId()-1, reservationDAO.getAll().size())
-        );
+        assertTrue(reservationDAO.getAll().contains(reservation));
+        assertEquals(reservationDAO.getNextId() - 1, reservationDAO.getAll().size());
     }
 
     @Test
     void getNextId() {
-        int actual = reservationDAO.getNextId();
-        int expected = reservationDAO.getAll().size() + 1;
-        assertEquals(expected, actual);
+        assertEquals(reservationDAO.getAll().size() + 1, reservationDAO.getNextId());
     }
 
     @Test
-    void saveAll(){
+    void saveAll() {
         reservationDAO.saveAll();
-        int size1 = reservationDAO.getAll().size();
-
-        ReservationDAO reservationDAO2 = new ReservationDAO();
-        int size2 = reservationDAO2.getAll().size();
-
-        assertEquals(size1, size2);
+        assertEquals(reservationDAO.getAll().size(), new ReservationDAO().getAll().size());
     }
 }

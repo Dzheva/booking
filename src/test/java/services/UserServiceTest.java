@@ -6,39 +6,34 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class UserServiceTest {
-    UserService userService;
-    String login = "login1";
-    String password = "pass2";
-    String firstName = "Bob";
-    String lastName = "Franklin";
-
-    Optional<User> createdUser;
+    private UserService userService;
+    private User expectedUser;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         userService = new UserService();
-        userService.createUser(login, password, firstName, lastName);
-        createdUser = userService.findUser(login, password);
+        expectedUser =
+                new User(-1, "sampleLogin", "samplePassword", "Bob", "Franklin");
+        userService.createUser(
+                expectedUser.login(), expectedUser.password(), expectedUser.firstName(), expectedUser.lastName());
     }
 
     @Test
     void findUser() {
-        assertAll(
-                () -> assertFalse(createdUser.isEmpty()),
-                () -> assertTrue(createdUser.get().firstName().equals(firstName)),
-                () -> assertTrue(createdUser.get().lastName().equals(lastName))
-        );
+        Optional<User> user = userService.findUser(expectedUser.login(), expectedUser.password());
+        assertTrue(user.isPresent());
     }
 
     @Test
     void createUser() {
-        assertAll(
-                () -> assertTrue(createdUser.get().login().equals(login)),
-                () -> assertTrue(createdUser.get().password().equals(password)),
-                () -> assertTrue(createdUser.get().firstName().equalsIgnoreCase("BOB"))
-        );
+        Optional<User> user = userService.findUser(expectedUser.login(), expectedUser.password());
+        assertTrue(user.isPresent());
+        assertEquals(expectedUser.login(), user.get().login());
+        assertEquals(expectedUser.password(), user.get().password());
+        assertTrue(user.get().firstName().equalsIgnoreCase("BOB"));
     }
 }

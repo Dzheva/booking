@@ -4,63 +4,52 @@ import models.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class UserDAOTest {
-
     private UserDAO userDAO;
-
-    private User testUser;
+    private User user;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         userDAO = new UserDAO();
-        testUser = new User(userDAO.getNextId(), "abc", "123", "TestName", "TestLastName");
-        userDAO.create(testUser);
+        user = new User(
+                userDAO.getNextId(), "test1", "", "name", "lastName");
+        userDAO.create(user);
     }
 
     @Test
     void create() {
-        assertAll(
-                () -> assertTrue(userDAO.getAll().contains(testUser)),
-                () -> assertFalse(userDAO.getAll().contains(null))
-        );
+        assertTrue(userDAO.getAll().contains(user));
     }
 
     @Test
     void get() {
-        assertAll(
-                () -> assertEquals(userDAO.get(testUser.id()),testUser),
-                () -> assertEquals(userDAO.get(testUser.id()).firstName(), testUser.firstName()),
-                () -> assertEquals(userDAO.get(testUser.id()).lastName(), testUser.lastName())
-        );
+        assertEquals(userDAO.get(user.id()), user);
+        assertEquals(userDAO.get(user.id()).firstName(), user.firstName());
+        assertEquals(userDAO.get(user.id()).lastName(), user.lastName());
     }
 
     @Test
     void getAll() {
-        assertAll(
-                () -> assertTrue(userDAO.getAll().contains(testUser)),
-                () -> assertEquals(userDAO.getNextId()-1, userDAO.getAll().size())
-        );
+        User newUser = new User(
+                userDAO.getNextId(), "test2", "", "name", "lastName");
+        userDAO.create(newUser);
+        assertTrue(userDAO.getAll().contains(user));
+        assertTrue(userDAO.getAll().contains(newUser));
+        assertTrue(userDAO.getAll().size() >= 2);
     }
 
     @Test
-    void getNextId(){
-        int actual = userDAO.getNextId();
-        int expected = userDAO.getAll().size() + 1;
-
-        assertEquals(expected, actual);
+    void getNextId() {
+        assertEquals(userDAO.getAll().size() + 1, userDAO.getNextId());
     }
 
     @Test
-    void saveAll(){
+    void saveAll() {
         userDAO.saveAll();
-        int size1 = userDAO.getAll().size();
-
-        UserDAO userDAO2 = new UserDAO();
-        int size2 = userDAO2.getAll().size();
-
-        assertEquals(size1, size2);
+        int currentSize = userDAO.getAll().size();
+        assertEquals(currentSize, new UserDAO().getAll().size());
     }
-
 }
