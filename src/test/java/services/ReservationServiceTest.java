@@ -18,9 +18,23 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class ReservationServiceTest {
     private ReservationService reservationService;
 
+    private Flight testFlight;
+    private User testUser;
+    private Reservation testReservation;
+
     @BeforeEach
     void setUp(){
         reservationService = new ReservationService();
+        testFlight = new Flight(101, "Origin", "Destination",
+                LocalDateTime.now(), LocalDateTime.now().plusHours(2), 10);
+        testUser = new User(101, "test", "test", "Test", "Test");
+        List<Passenger> testPassengers = List.of(new Passenger("Passenger1", "LastName1"), new Passenger("Passenger2", "LastName2"));
+
+        reservationService.createReservation(testFlight, testUser, testPassengers);
+
+        List<Reservation> user101 = reservationService.getUserReservations(101);
+        testReservation = user101.get(0);
+
     }
 
     @Test
@@ -36,11 +50,6 @@ class ReservationServiceTest {
 
     @Test
     void createReservation() {
-        Flight testFlight = new Flight(101, "Origin", "Destination", LocalDateTime.now(), LocalDateTime.now().plusHours(2), 10);
-        User testUser = new User(101, "test", "test", "Test", "Test");
-        List<Passenger> testPassengers = List.of(new Passenger("Passenger1", "LastName1"), new Passenger("Passenger2", "LastName2"));
-        reservationService.createReservation(testFlight, testUser, testPassengers);
-
         int x = reservationService.getAllReservations().size() - 1;
         Reservation createdReservation = reservationService.getAllReservations().get(x);
         assertAll(
@@ -52,30 +61,17 @@ class ReservationServiceTest {
 
     @Test
     void getUserReservations() {
-        Flight testFlight = new Flight(101, "Origin", "Destination", LocalDateTime.now(), LocalDateTime.now().plusHours(2), 10);
-        User testUser = new User(101, "test", "test", "Test", "Test");
-        List<Passenger> testPassengers = List.of(new Passenger("Passenger1", "LastName1"), new Passenger("Passenger2", "LastName2"));
-        reservationService.createReservation(testFlight, testUser, testPassengers);
-
-        List<Reservation> user101 = reservationService.getUserReservations(101);
-        Reservation testReservation = user101.get(0);
+        List<Reservation> testList = reservationService.getUserReservations(101);
 
         assertAll(
-                () -> assertFalse(user101.isEmpty()),
-                () -> assertTrue(user101.size() == 1),
+                () -> assertFalse(testList.isEmpty()),
+                () -> assertTrue(testList.size() == 1),
                 () -> assertEquals(testReservation.userId(),101)
         );
     }
 
     @Test
     void getUserReservation() {
-        Flight testFlight = new Flight(101, "Origin", "Destination", LocalDateTime.now(), LocalDateTime.now().plusHours(2), 10);
-        User testUser = new User(101, "test", "test", "Test", "Test");
-        List<Passenger> testPassengers = List.of(new Passenger("Passenger1", "LastName1"), new Passenger("Passenger2", "LastName2"));
-        reservationService.createReservation(testFlight, testUser, testPassengers);
-
-        List<Reservation> user101 = reservationService.getUserReservations(101);
-        Reservation testReservation = user101.get(0);
         Optional<Reservation> expectedReservation = reservationService.getUserReservation(testReservation.userId(), testReservation.id());
 
         assertAll(
@@ -88,14 +84,6 @@ class ReservationServiceTest {
 
     @Test
     void cancelReservation() {
-        Flight testFlight = new Flight(101, "Origin", "Destination", LocalDateTime.now(), LocalDateTime.now().plusHours(2), 10);
-        User testUser = new User(101, "test", "test", "Test", "Test");
-        List<Passenger> testPassengers = List.of(new Passenger("Passenger1", "LastName1"), new Passenger("Passenger2", "LastName2"));
-        reservationService.createReservation(testFlight, testUser, testPassengers);
-
-        List<Reservation> user101 = reservationService.getUserReservations(101);
-        Reservation testReservation = user101.get(0);
-
         assertTrue(reservationService.getAllReservations().contains(testReservation));
         assertTrue(testFlight.getSeatsAvailable() == 7);
 
