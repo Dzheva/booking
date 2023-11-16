@@ -1,8 +1,15 @@
 package daos;
 
+import constants.ResourceName;
 import models.User;
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import utilities.ResourceHandler;
+
+import java.io.File;
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -10,6 +17,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class UserDAOTest {
     private UserDAO userDAO;
     private User user;
+
+    @AfterAll
+    public static void afterAllTests() {
+        try {
+            FileUtils.delete(new File(ResourceHandler.getResourcePath(ResourceName.USERS)));
+        } catch (IOException ignore) {
+        }
+    }
 
     @BeforeEach
     void setUp() {

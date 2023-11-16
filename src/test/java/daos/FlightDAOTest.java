@@ -1,9 +1,15 @@
 package daos;
 
+import constants.ResourceName;
 import models.Flight;
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import utilities.ResourceHandler;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,6 +19,14 @@ class FlightDAOTest {
     private FlightDAO flightDAO;
     private int initialSize;
     private Flight flight;
+
+    @AfterAll
+    public static void afterAllTests() {
+        try {
+            FileUtils.delete(new File(ResourceHandler.getResourcePath(ResourceName.FLIGHTS)));
+        } catch (IOException ignore) {
+        }
+    }
 
     @BeforeEach
     void setUp() {

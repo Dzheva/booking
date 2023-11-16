@@ -36,7 +36,7 @@ public final class ResourceHandler {
         }
     }
 
-    private static String getResourcePath(String resourceName) {
+    public static String getResourcePath(String resourceName) {
         return Path.of("src", "main", "resources", resourceName).toAbsolutePath().toString();
     }
 }

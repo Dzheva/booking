@@ -1,10 +1,16 @@
 package daos;
 
+import constants.ResourceName;
 import models.Passenger;
 import models.Reservation;
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import utilities.ResourceHandler;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +20,13 @@ class ReservationDAOTest {
     private ReservationDAO reservationDAO;
     private int initialSize;
     private Reservation reservation;
+
+    @AfterAll
+    public static void afterAllTests() {
+        try {
+            FileUtils.delete(new File(ResourceHandler.getResourcePath(ResourceName.RESERVATIONS)));
+        } catch (IOException ignore) {}
+    }
 
     @BeforeEach
     void setUp() {
